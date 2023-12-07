@@ -12,11 +12,11 @@ TIME_PHOTO_TRIGGER = 0.002 # seconds
 TIME_TOGGLE_MEDIA_TRANSFER = 0.0015 # seconds
 TIME_NEUTRAL = 0.001 # seconds
 
-PHOTO_INTERVAL = 10 # take a photo every x seconds
-NUM_PHOTOS = 10
+PHOTO_INTERVAL = 3 # take a photo every x seconds
+NUM_PHOTOS = 5
 
 CAMERA_PWM_PIN = 18 # GPIO pin on the Pi connected to the camera
-CAMERA_DIRECTORY = "./Photo" # directory where the camera files can be viewed at
+CAMERA_DIRECTORY = "./" # directory where the camera files can be viewed at
 
 #initialize variables
 media_transfer_mode = False
@@ -29,7 +29,9 @@ def set_neutral():
     GPIO.cleanup(TIME_NEUTRAL)
 
 # takes a photo on the camera
-def take_pic():
+def take_pic(photoNum=-1):
+    if photoNum>=0:
+        print("photo #: ",photoNum)
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(pin, GPIO.OUT)
     GPIO.output(pin, GPIO.HIGH)
@@ -74,15 +76,13 @@ def take_get_photo():
     
 ###################################################################################################
 
-#initialization
-initialize_gpio()
-camera_pwm = initialize_camera()
-
 # Main script logic
 print("Time of Mission: ", np.round(NUM_PHOTOS*PHOTO_INTERVAL/60, 2), " mins")
 
+set_neutral()
+for i in range(len(NUM_PHOTOS)):
+    
+    take_pic(i)
+    sleep(PHOTO_INTERVAL)
 
-
-#finally:
-    #camera_pwm.stop()
-    #GPIO.cleanup()
+GPIO.cleanup()
