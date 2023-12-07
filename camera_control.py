@@ -21,6 +21,14 @@ CAMERA_DIRECTORY = "./" # directory where the camera files can be viewed at
 #initialize variables
 media_transfer_mode = False
 
+def is_camera_mounted(camera_path):
+    try:
+        # Check if the provided path exists in the file system
+        return os.path.exists(camera_path)
+
+    except Exception as e:
+        return False  # Return False in case of any exceptions
+
 #resets to neutral 
 def set_neutral():
     GPIO.setmode(GPIO.BCM)
@@ -71,6 +79,24 @@ def take_get_photo():
     time = datetime.now().strftime("%H:%M:%S")
     infolog = [time,get_recent_photo_path(),coords]
     return img, infolog
+
+def take_photo_and_get_path():
+    try:
+        # Take a photo
+        take_pic()
+        time.sleep(1)
+
+        # Turn on media access mode
+        toggle_media_transfer()
+        while not is_camera_mounted()
+
+        # Get the path of the most recent image
+        recent_photo_path = get_recent_photo_path()
+
+        return recent_photo_path
+
+    except Exception as e:
+        return str(e)
 
 
     
